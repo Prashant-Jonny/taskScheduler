@@ -9,32 +9,58 @@ namespace taskScheduler
 {
     public class Dispatcher
     {
+        public Process curProcess;
         public IList<Process> waitLine;
-        public IList<Process> allTasks;
+        public IList<Process> allTasks = new List<Process>();
         public static Random r = new Random();
         //public Dictionary<int,IList<Process>> plannedTasksAdditions
 
         public int CurrentTick { get; private set; }
 
-        public const double TaskAdditionProbability = 0.01;
+        public const double TaskAdditionProbability = 0.1;
         public const int TickDuration = 500;
         public const int MaxTasks = 30;
 
+        public Dispatcher()
+        {
+            waitLine = new List<Process>();
+            for (int i = 0; i < MaxTasks / 2; i++)
+            {
+                var task = new Process(CurrentTick)
+                {
+                    TimeToSolve = r.Next(1, 5),
+                };
+                waitLine.Add(task);
+                allTasks.Add(task);
+            }
+        }
+
         public void RunTick()
         {
+            CurrentTick++;
             tryAddTask();
+            if (curProcess == null)
+            {
+                curProcess = waitLine.First();
+            }
             if (waitLine.Any())
             {
-                var task = waitLine.First();
                 Thread.Sleep(TickDuration);
-                task.Progress++;
-                if (task.Progress == task.SolveTime)
+                curProcess.Progress++;
+                curProcess.WasUpdated = true;
+                if (curProcess.Progress >= curProcess.TimeToSolve)
                 {
-                    waitLine.RemoveAt(0);
+                    waitLine.Remove(curProcess);
+                    curProcess = null;
+                }
+                else
+                {
+                    curProcess.WaitTime--;
                 }
                 foreach(var p in waitLine)
                 {
-                    p.SolveTime++;
+                    p.WaitTime++;
+                    p.WasUpdated = true;
                 }
             }
         }
@@ -47,7 +73,8 @@ namespace taskScheduler
             {
                 var task = new Process(CurrentTick)
                 {
-                    SolveTime = r.Next(1, 5),
+                    TimeToSolve = r.Next(1, 5),
+                    WasUpdated = true
                 };
                 waitLine.Add(task);
                 allTasks.Add(task);

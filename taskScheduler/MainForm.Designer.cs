@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeliveryTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SolveTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -39,7 +39,7 @@
             this.restartBtn = new System.Windows.Forms.Button();
             this.tickLabel = new System.Windows.Forms.Label();
             this.debugLbl = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // backgroundWorker1
@@ -47,21 +47,33 @@
             this.backgroundWorker1.WorkerSupportsCancellation = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
-            // dataGridView1
+            // dataGridView
             // 
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AllowUserToResizeColumns = false;
+            this.dataGridView.AllowUserToResizeRows = false;
+            this.dataGridView.CausesValidation = false;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id,
             this.DeliveryTime,
             this.SolveTime,
             this.FinishTime,
             this.WaitTime});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(434, 580);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridView.Location = new System.Drawing.Point(9, 12);
+            this.dataGridView.MultiSelect = false;
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.ReadOnly = true;
+            this.dataGridView.RowHeadersVisible = false;
+            this.dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridView.ShowCellErrors = false;
+            this.dataGridView.ShowCellToolTips = false;
+            this.dataGridView.ShowEditingIcon = false;
+            this.dataGridView.ShowRowErrors = false;
+            this.dataGridView.Size = new System.Drawing.Size(484, 267);
+            this.dataGridView.TabIndex = 0;
+            this.dataGridView.TabStop = false;
             // 
             // Id
             // 
@@ -96,7 +108,7 @@
             // 
             // startStopBtn
             // 
-            this.startStopBtn.Location = new System.Drawing.Point(583, 12);
+            this.startStopBtn.Location = new System.Drawing.Point(502, 12);
             this.startStopBtn.Name = "startStopBtn";
             this.startStopBtn.Size = new System.Drawing.Size(123, 45);
             this.startStopBtn.TabIndex = 1;
@@ -106,7 +118,7 @@
             // 
             // restartBtn
             // 
-            this.restartBtn.Location = new System.Drawing.Point(583, 63);
+            this.restartBtn.Location = new System.Drawing.Point(502, 63);
             this.restartBtn.Name = "restartBtn";
             this.restartBtn.Size = new System.Drawing.Size(123, 50);
             this.restartBtn.TabIndex = 2;
@@ -118,7 +130,7 @@
             // 
             this.tickLabel.AutoSize = true;
             this.tickLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tickLabel.Location = new System.Drawing.Point(627, 181);
+            this.tickLabel.Location = new System.Drawing.Point(546, 181);
             this.tickLabel.Name = "tickLabel";
             this.tickLabel.Size = new System.Drawing.Size(35, 37);
             this.tickLabel.TabIndex = 3;
@@ -127,7 +139,7 @@
             // debugLbl
             // 
             this.debugLbl.AutoSize = true;
-            this.debugLbl.Location = new System.Drawing.Point(486, 277);
+            this.debugLbl.Location = new System.Drawing.Point(499, 125);
             this.debugLbl.Name = "debugLbl";
             this.debugLbl.Size = new System.Drawing.Size(0, 13);
             this.debugLbl.TabIndex = 4;
@@ -136,15 +148,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(844, 604);
+            this.ClientSize = new System.Drawing.Size(637, 291);
             this.Controls.Add(this.debugLbl);
             this.Controls.Add(this.tickLabel);
             this.Controls.Add(this.restartBtn);
             this.Controls.Add(this.startStopBtn);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dataGridView);
             this.Name = "MainForm";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -153,7 +165,7 @@
         #endregion
 
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn DeliveryTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn SolveTime;

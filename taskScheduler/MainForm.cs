@@ -19,12 +19,12 @@ namespace taskScheduler
         }
         private bool running { get; set; } = false;
         private Dispatcher dispatcher { get; set; }
+        private Dictionary<int, DataGridViewRow> idToRowDictionary = new Dictionary<int, DataGridViewRow>();
 
         private void startStopBtn_Click(object sender, EventArgs e)
         {
             if (!running)
             {
-                drawAll();
                 running = true;
                 backgroundWorker1.RunWorkerAsync();
                 startStopBtn.Text = "STOP";
@@ -32,17 +32,13 @@ namespace taskScheduler
             else
             {
                 running = false;
-                Process.createdProcesses = 0;
-                tickLabel.Text = "0";
-                dispatcher = new Dispatcher();
-                dataGridView1.Rows.Clear();
                 startStopBtn.Text = "START!";
             }
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            for(int i = 0; i < 40; i++)
+            while(running)
             {
                 dispatcher.RunTick();
                 tickLabel.Text = dispatcher.CurrentTick.ToString();
@@ -51,41 +47,32 @@ namespace taskScheduler
             }
         }
 
-        private void drawAll()
+        private void redrawRow(Process p)
         {
-            dataGridView1.Rows.Clear();
-            foreach(var p in dispatcher.allTasks)
-            {
-                
-                var row = getRowAt(p.Id);
-                var finishTimeColumnValue = (p.TimeToSolve != p.Progress ? "??" : (p.SolvedTime()).ToString());
-                row.SetValues(p.Id, p.DeliveryTick, p.TimeToSolve, finishTimeColumnValue, p.WaitTime);
-            }
+            p.WasUpdated = false;
+            var row = getRowAt(p.Id);
+            var finishTimeColumnValue = (p.TimeToSolve != p.Progress ? p.ProcessStatus() : (p.SolvedTime()).ToString());
+            row.SetValues(p.Id, p.DeliveryTick, p.TimeToSolve, finishTimeColumnValue, p.WaitTime);
         }
 
         private void updateTable()
         {
             foreach (var p in dispatcher.allTasks.Where(p => p.WasUpdated))
             {
-                p.WasUpdated = false;
-                var row = getRowAt(p.Id);
-                var finishTimeColumnValue = (p.TimeToSolve != p.Progress ? "??" : p.SolvedTime().ToString());
-                row.SetValues(p.Id, p.DeliveryTick, p.TimeToSolve,  finishTimeColumnValue, p.WaitTime);
+                redrawRow(p);
             }
         }
-
-        private Dictionary<int, DataGridViewRow> idToRowDictionary = new Dictionary<int, DataGridViewRow>();
 
         private DataGridViewRow getRowAt(int id)
         {
             if (!idToRowDictionary.ContainsKey(id))
             {
                 var row = new DataGridViewRow();
-                row.CreateCells(dataGridView1);
+                row.CreateCells(dataGridView);
 
-                int index = dataGridView1.Rows.Add(id,row);
-                idToRowDictionary[id] = dataGridView1.Rows[index];
-                return dataGridView1.Rows[index];
+                int index = dataGridView.Rows.Add(id,row);
+                idToRowDictionary[id] = dataGridView.Rows[index];
+                return dataGridView.Rows[index];
             }
             return idToRowDictionary[id];
         }
@@ -95,8 +82,8 @@ namespace taskScheduler
             Process.createdProcesses = 0;
             tickLabel.Text = "0";
             dispatcher = new Dispatcher();
-            dataGridView1.Rows.Clear();
-            drawAll();
+            idToRowDictionary.Clear();
+            dataGridView.Rows.Clear();
         }
     }
 }

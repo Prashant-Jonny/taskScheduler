@@ -42,9 +42,11 @@ namespace taskScheduler
             {
                 dispatcher.RunTick();
                 tickLabel.Text = dispatcher.CurrentTick.ToString();
-                debugLbl.Text = string.Format("allTasks:{0}, in wait:{1}", dispatcher.allTasks.Count, dispatcher.waitLine.Count);
+                debugLbl.Text = string.Format("allTasks:{0}\nin wait:{1}\nstandby:{2}", 
+                    dispatcher.allTasks.Count, dispatcher.waitLine.Count, dispatcher.Standby);
                 updateTable();
             }
+            running = false;
         }
 
         private void redrawRow(Process p)

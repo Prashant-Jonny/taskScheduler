@@ -15,6 +15,7 @@ namespace taskScheduler
         public static Random r = new Random();
 
         public int CurrentTick { get; private set; }
+        public int Standby { get; private set; }
 
         public const double TaskAdditionProbability = 0.25;
         public const int TickDuration = 500;
@@ -28,6 +29,7 @@ namespace taskScheduler
 
             if (!waitLine.Any())
             {
+                Standby++;
                 return;
             }
             RefreshCurrentTask();
@@ -65,7 +67,8 @@ namespace taskScheduler
 
         private void tryAddTask()
         {
-            if (waitLine.Count < MaxTasks && r.NextDouble() < TaskAdditionProbability)
+            if (//allTasks.Count < 24 &&
+                waitLine.Count < MaxTasks && r.NextDouble() < TaskAdditionProbability)
             {
                 var task = new Process(CurrentTick)
                 {

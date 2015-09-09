@@ -61,7 +61,7 @@
             this.SolveTime,
             this.FinishTime,
             this.WaitTime});
-            this.dataGridView.Location = new System.Drawing.Point(9, 12);
+            this.dataGridView.Location = new System.Drawing.Point(12, 12);
             this.dataGridView.MultiSelect = false;
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
@@ -71,7 +71,7 @@
             this.dataGridView.ShowCellToolTips = false;
             this.dataGridView.ShowEditingIcon = false;
             this.dataGridView.ShowRowErrors = false;
-            this.dataGridView.Size = new System.Drawing.Size(484, 267);
+            this.dataGridView.Size = new System.Drawing.Size(455, 581);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.TabStop = false;
             // 
@@ -108,9 +108,9 @@
             // 
             // startStopBtn
             // 
-            this.startStopBtn.Location = new System.Drawing.Point(502, 12);
+            this.startStopBtn.Location = new System.Drawing.Point(473, 12);
             this.startStopBtn.Name = "startStopBtn";
-            this.startStopBtn.Size = new System.Drawing.Size(123, 45);
+            this.startStopBtn.Size = new System.Drawing.Size(133, 45);
             this.startStopBtn.TabIndex = 1;
             this.startStopBtn.Text = "START!";
             this.startStopBtn.UseVisualStyleBackColor = true;
@@ -118,9 +118,9 @@
             // 
             // restartBtn
             // 
-            this.restartBtn.Location = new System.Drawing.Point(502, 63);
+            this.restartBtn.Location = new System.Drawing.Point(473, 63);
             this.restartBtn.Name = "restartBtn";
-            this.restartBtn.Size = new System.Drawing.Size(123, 50);
+            this.restartBtn.Size = new System.Drawing.Size(133, 50);
             this.restartBtn.TabIndex = 2;
             this.restartBtn.Text = "Restart";
             this.restartBtn.UseVisualStyleBackColor = true;
@@ -130,7 +130,7 @@
             // 
             this.tickLabel.AutoSize = true;
             this.tickLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tickLabel.Location = new System.Drawing.Point(546, 181);
+            this.tickLabel.Location = new System.Drawing.Point(520, 116);
             this.tickLabel.Name = "tickLabel";
             this.tickLabel.Size = new System.Drawing.Size(35, 37);
             this.tickLabel.TabIndex = 3;
@@ -139,16 +139,17 @@
             // debugLbl
             // 
             this.debugLbl.AutoSize = true;
-            this.debugLbl.Location = new System.Drawing.Point(499, 125);
+            this.debugLbl.Location = new System.Drawing.Point(470, 159);
             this.debugLbl.Name = "debugLbl";
-            this.debugLbl.Size = new System.Drawing.Size(0, 13);
+            this.debugLbl.Size = new System.Drawing.Size(33, 13);
             this.debugLbl.TabIndex = 4;
+            this.debugLbl.Text = "blank";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(637, 291);
+            this.ClientSize = new System.Drawing.Size(641, 605);
             this.Controls.Add(this.debugLbl);
             this.Controls.Add(this.tickLabel);
             this.Controls.Add(this.restartBtn);

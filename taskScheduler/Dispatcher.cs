@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,25 +10,25 @@ namespace taskScheduler
 {
     public class Dispatcher
     {
-        public Process curProcess;
-        public IList<Process> waitLine = new List<Process>();
-        public IList<Process> allTasks = new List<Process>();
-        public static Random r = new Random();
+        public Process CurProcess;
+        public IList<Process> WaitLine = new List<Process>();
+        public IList<Process> AllTasks = new BindingList<Process>();
+        public static Random R = new Random();
 
         public int CurrentTick { get; private set; }
         public int Standby { get; private set; }
 
-        public const double TaskAdditionProbability = 0.25;
+        public const double TaskAdditionProbability = 0.5;
         public const int TickDuration = 500;
         public const int MaxTasks = 30;
 
         public void RunTick()
         {
             CurrentTick++;
-            tryAddTask();
+            TryAddTask();
             Thread.Sleep(TickDuration);
 
-            if (!waitLine.Any())
+            if (!WaitLine.Any())
             {
                 Standby++;
                 return;
@@ -38,45 +39,42 @@ namespace taskScheduler
 
         private void UpdateTasksInQueue()
         {
-            foreach (var p in waitLine)
+            foreach (var p in WaitLine)
             {
                 p.WaitTime++;
-                p.WasUpdated = true;
             }
         }
 
         private void RefreshCurrentTask()
         {
-            if (curProcess == null)
+            if (CurProcess == null)
             {
-                curProcess = waitLine.First();
+                CurProcess = WaitLine.First();
             }
 
-            curProcess.Progress++;
-            curProcess.WasUpdated = true;
-            if (curProcess.Progress >= curProcess.TimeToSolve)
+            CurProcess.Progress++;
+            if (CurProcess.Progress >= CurProcess.TimeToSolve)
             {
-                waitLine.Remove(curProcess);
-                curProcess = null;
+                WaitLine.Remove(CurProcess);
+                CurProcess = null;
             }
             else
             {
-                curProcess.WaitTime--;
+                CurProcess.WaitTime--;
             }
         }
 
-        private void tryAddTask()
+        private void TryAddTask()
         {
             if (//allTasks.Count < 24 &&
-                waitLine.Count < MaxTasks && r.NextDouble() < TaskAdditionProbability)
+                WaitLine.Count < MaxTasks && R.NextDouble() < TaskAdditionProbability)
             {
                 var task = new Process(CurrentTick)
                 {
-                    TimeToSolve = r.Next(3, 10),
-                    WasUpdated = true
+                    TimeToSolve = R.Next(3, 10),
                 };
-                waitLine.Add(task);
-                allTasks.Add(task);
+                WaitLine.Add(task);
+                AllTasks.Add(task);
             }
         }
     }

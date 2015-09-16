@@ -2,26 +2,20 @@
 {
     public class Process
     {
-        public static int createdProcesses { get; set; }
-
-
-
+        public static int CreatedProcesses { get; set; }
         public Process(int deliveryTick)
         {
-            Id = createdProcesses;
+            Id = CreatedProcesses;
             DeliveryTick = deliveryTick;
-            createdProcesses++;
+            CreatedProcesses++;
         }
         public int Id { get; private set; }
-        public int TimeToSolve { get; set; }            //time it takes to complete task
-        public int Progress { get; set; }             //progress on completion of task
-        public int DeliveryTick { get; private set; } //tick on which task was delivered
-        public bool WasUpdated { get; set; }          //flag if task was updated on last tick
+        public int TimeToSolve { get; set; }   //time it takes to complete task
+        public int Progress { get; set; }      //progress on completion of task
+        public int DeliveryTick { get; }       //tick on which task was delivered
 
-        public int SolvedTime() => TimeToSolve + DeliveryTick + WaitTime;
-
-        //counter of how many ticks process has been awaiting since its arrival
+        public int SolvedTime() => TimeToSolve + DeliveryTick + WaitTime; //counter of how many ticks process has been awaiting since its arrival
         public int WaitTime { get; set; }
-        public string ProcessStatus() => string.Format("{0:0.00}%", (double)Progress / TimeToSolve * 100);
+        public string ProcessStatus() => $"{(double)Progress / TimeToSolve * 100:0.00}%";
     }
 }

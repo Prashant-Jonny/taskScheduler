@@ -22,7 +22,14 @@ namespace taskScheduler
         {
             Invoke((Action) (() =>
             {
-                debugLbl.Text = $"allTasks:{Dispatcher.AllTasks.Count}";
+                tickLabel.Text = $"{Dispatcher.CurrentTick}";
+                double avg = 0;
+                foreach(var i in Dispatcher.AllTasks)
+                {
+                    avg += i.WaitTime;
+                }
+                avg /= Dispatcher.AllTasks.Count;
+                debugLbl.Text = $"allTasks:{Dispatcher.AllTasks.Count}\nin wait:{Dispatcher.WaitLine.Count}\nstandby:{Dispatcher.Standby}\navg wait:{avg}";
                 if (args.NewTask != null)
                 {
                     Dispatcher.AllTasks.Add(args.NewTask);
@@ -54,17 +61,7 @@ namespace taskScheduler
             while(Running)
             {
                 Dispatcher.RunTick();
-
-                //Invoke((Action)(() => tickLabel.Text = Dispatcher.CurrentTick.ToString()));
-                //debugLbl.Text =
-                //    $"allTasks:{Dispatcher.AllTasks.Count}\nin wait:{Dispatcher.WaitLine.Count}\nstandby:{Dispatcher.Standby}";
-
-                //if (Dispatcher.AllTasks.Count > 15)
-                //{
-                //    Debug.WriteLine("AHTUNG!!   " + Dispatcher.AllTasks.Count);
-                //}  
             }
-            Running = false;
         }
 
         private void restartBtn_Click(object sender, EventArgs e)
@@ -72,7 +69,14 @@ namespace taskScheduler
             Process.CreatedProcesses = 0;
             tickLabel.Text = @"0";
             Dispatcher = new Dispatcher();
-            dataGridView.DataSource = Dispatcher.AllTasks;
+            processBindingSource.DataSource = Dispatcher.AllTasks;
+            checkBox1.Checked = true;
+            Dispatcher.UpdateStatus += DispatcherOnUpdateStatus;
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+               Dispatcher.GenerateTasks = checkBox1.Checked;
         }
     }
 }

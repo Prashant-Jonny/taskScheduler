@@ -41,6 +41,7 @@
             this.deliveryTickDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.waitTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.processBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.processBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -130,6 +131,7 @@
             this.progressDataGridViewTextBoxColumn.DataPropertyName = "Progress";
             this.progressDataGridViewTextBoxColumn.HeaderText = "Progress";
             this.progressDataGridViewTextBoxColumn.Name = "progressDataGridViewTextBoxColumn";
+            this.progressDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // deliveryTickDataGridViewTextBoxColumn
             // 
@@ -148,11 +150,25 @@
             // 
             this.processBindingSource.DataSource = typeof(taskScheduler.Process);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(548, 351);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(98, 17);
+            this.checkBox1.TabIndex = 6;
+            this.checkBox1.Text = "Generate tasks";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(695, 605);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.debugLbl);
             this.Controls.Add(this.tickLabel);
@@ -182,6 +198,7 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn wasUpdatedDataGridViewCheckBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn waitTimeDataGridViewTextBoxColumn;
         private System.Windows.Forms.BindingSource processBindingSource;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

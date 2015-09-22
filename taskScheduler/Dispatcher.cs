@@ -16,6 +16,7 @@ namespace taskScheduler
     }
     public class Dispatcher
     {
+        public bool GenerateTasks { get; set; } = true;
         public Process CurProcess;
         public IList<Process> WaitLine = new List<Process>();
         public IList<Process> AllTasks = new BindingList<Process>();
@@ -35,6 +36,7 @@ namespace taskScheduler
 
         public void RunTick()
         {
+            if (!GenerateTasks && !WaitLine.Any()) return;
             Thread.Sleep(TickDuration);
             CurrentTick++;
             var newTask = TryAddTask();
@@ -91,7 +93,7 @@ namespace taskScheduler
 
         private Process TryAddTask()
         {
-            if (//allTasks.Count < 24 &&
+            if (GenerateTasks &&
                 WaitLine.Count < MaxTasks && R.NextDouble() < TaskAdditionProbability)
             {
                 var task = new Process(CurrentTick)

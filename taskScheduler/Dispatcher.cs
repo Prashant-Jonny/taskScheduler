@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace taskScheduler
 {
+    public class ProcessUpdateInfo : EventArgs
+    {
+        public IList<Process> AllTasks { get; set; } 
+        public Process NewTask { get; set; }
+
+    }
     public class Dispatcher
     {
         public Process CurProcess;
@@ -22,12 +28,21 @@ namespace taskScheduler
         public const int TickDuration = 500;
         public const int MaxTasks = 30;
 
+
+        public delegate void UpdateProcesses(object sender, ProcessUpdateInfo args);
+
+        public event UpdateProcesses UpdateStatus;
+
         public void RunTick()
         {
-            CurrentTick++;
-            TryAddTask();
             Thread.Sleep(TickDuration);
-
+            CurrentTick++;
+            var newTask = TryAddTask();
+            if (newTask != null)
+            {
+                //AllTasks.Add(newTask);
+                WaitLine.Add(newTask);
+            }
             if (!WaitLine.Any())
             {
                 Standby++;
@@ -35,6 +50,16 @@ namespace taskScheduler
             }
             RefreshCurrentTask();
             UpdateTasksInQueue();
+
+            if (UpdateStatus != null)
+            {
+                var i = new ProcessUpdateInfo
+                {
+                    AllTasks = AllTasks,
+                    NewTask = newTask,
+                };
+                UpdateStatus(this, i);
+            }
         }
 
         private void UpdateTasksInQueue()
@@ -52,8 +77,8 @@ namespace taskScheduler
                 CurProcess = WaitLine.First();
             }
 
-            CurProcess.Progress++;
-            if (CurProcess.Progress >= CurProcess.TimeToSolve)
+            CurProcess.ProgressInt++;
+            if (CurProcess.ProgressInt >= CurProcess.TimeToSolve)
             {
                 WaitLine.Remove(CurProcess);
                 CurProcess = null;
@@ -64,7 +89,7 @@ namespace taskScheduler
             }
         }
 
-        private void TryAddTask()
+        private Process TryAddTask()
         {
             if (//allTasks.Count < 24 &&
                 WaitLine.Count < MaxTasks && R.NextDouble() < TaskAdditionProbability)
@@ -73,9 +98,10 @@ namespace taskScheduler
                 {
                     TimeToSolve = R.Next(3, 10),
                 };
-                WaitLine.Add(task);
-                AllTasks.Add(task);
+                return task;
+                //AllTasks.Add(task);
             }
+            return null;
         }
     }
 }

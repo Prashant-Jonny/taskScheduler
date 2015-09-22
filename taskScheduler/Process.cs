@@ -11,11 +11,12 @@
         }
         public int Id { get; private set; }
         public int TimeToSolve { get; set; }   //time it takes to complete task
-        public int Progress { get; set; }      //progress on completion of task
+        public int ProgressInt;      //progress on completion of task
         public int DeliveryTick { get; }       //tick on which task was delivered
+        public string Progress => $"{(double)ProgressInt / TimeToSolve * 100:0.00}%";
+        public string SolvedTime => (ProgressInt >= TimeToSolve) ? (TimeToSolve + DeliveryTick + WaitTime).ToString() : "-";
 
-        public int SolvedTime() => TimeToSolve + DeliveryTick + WaitTime; //counter of how many ticks process has been awaiting since its arrival
+        //counter of how many ticks process has been awaiting since its arrival
         public int WaitTime { get; set; }
-        public string ProcessStatus() => $"{(double)Progress / TimeToSolve * 100:0.00}%";
     }
 }

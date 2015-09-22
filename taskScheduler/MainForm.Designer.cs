@@ -52,7 +52,7 @@
             // 
             // startStopBtn
             // 
-            this.startStopBtn.Location = new System.Drawing.Point(631, 12);
+            this.startStopBtn.Location = new System.Drawing.Point(545, 12);
             this.startStopBtn.Name = "startStopBtn";
             this.startStopBtn.Size = new System.Drawing.Size(133, 45);
             this.startStopBtn.TabIndex = 1;
@@ -62,7 +62,7 @@
             // 
             // restartBtn
             // 
-            this.restartBtn.Location = new System.Drawing.Point(631, 63);
+            this.restartBtn.Location = new System.Drawing.Point(545, 63);
             this.restartBtn.Name = "restartBtn";
             this.restartBtn.Size = new System.Drawing.Size(133, 50);
             this.restartBtn.TabIndex = 2;
@@ -74,7 +74,7 @@
             // 
             this.tickLabel.AutoSize = true;
             this.tickLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tickLabel.Location = new System.Drawing.Point(678, 116);
+            this.tickLabel.Location = new System.Drawing.Point(592, 116);
             this.tickLabel.Name = "tickLabel";
             this.tickLabel.Size = new System.Drawing.Size(35, 37);
             this.tickLabel.TabIndex = 3;
@@ -83,7 +83,7 @@
             // debugLbl
             // 
             this.debugLbl.AutoSize = true;
-            this.debugLbl.Location = new System.Drawing.Point(628, 159);
+            this.debugLbl.Location = new System.Drawing.Point(545, 154);
             this.debugLbl.Name = "debugLbl";
             this.debugLbl.Size = new System.Drawing.Size(33, 13);
             this.debugLbl.TabIndex = 4;
@@ -96,6 +96,7 @@
             this.dataGridView.AllowUserToResizeColumns = false;
             this.dataGridView.AllowUserToResizeRows = false;
             this.dataGridView.AutoGenerateColumns = false;
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idDataGridViewTextBoxColumn,
@@ -108,7 +109,7 @@
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.dataGridView.Size = new System.Drawing.Size(527, 416);
+            this.dataGridView.Size = new System.Drawing.Size(527, 581);
             this.dataGridView.TabIndex = 5;
             // 
             // idDataGridViewTextBoxColumn
@@ -151,7 +152,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(779, 605);
+            this.ClientSize = new System.Drawing.Size(695, 605);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.debugLbl);
             this.Controls.Add(this.tickLabel);

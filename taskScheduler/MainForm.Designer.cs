@@ -35,13 +35,13 @@
             this.tickLabel = new System.Windows.Forms.Label();
             this.debugLbl = new System.Windows.Forms.Label();
             this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timeToSolveDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.progressDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deliveryTickDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.waitTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.processBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.processBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -86,9 +86,8 @@
             this.debugLbl.AutoSize = true;
             this.debugLbl.Location = new System.Drawing.Point(545, 154);
             this.debugLbl.Name = "debugLbl";
-            this.debugLbl.Size = new System.Drawing.Size(33, 13);
+            this.debugLbl.Size = new System.Drawing.Size(0, 13);
             this.debugLbl.TabIndex = 4;
-            this.debugLbl.Text = "blank";
             // 
             // dataGridView
             // 
@@ -112,6 +111,19 @@
             this.dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridView.Size = new System.Drawing.Size(527, 581);
             this.dataGridView.TabIndex = 5;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(548, 351);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(98, 17);
+            this.checkBox1.TabIndex = 6;
+            this.checkBox1.Text = "Generate tasks";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -149,19 +161,6 @@
             // processBindingSource
             // 
             this.processBindingSource.DataSource = typeof(taskScheduler.Process);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(548, 351);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(98, 17);
-            this.checkBox1.TabIndex = 6;
-            this.checkBox1.Text = "Generate tasks";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // MainForm
             // 

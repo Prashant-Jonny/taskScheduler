@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace taskScheduler
@@ -19,17 +20,12 @@ namespace taskScheduler
         }
 
         private void DispatcherOnUpdateStatus(object sender, ProcessUpdateInfo args)
-        {
+        {               
             Invoke((Action) (() =>
             {
                 tickLabel.Text = $"{Dispatcher.CurrentTick}";
-                double avg = 0;
-                foreach(var i in Dispatcher.AllTasks)
-                {
-                    avg += i.WaitTime;
-                }
-                avg /= Dispatcher.AllTasks.Count;
-                debugLbl.Text = $"allTasks:{Dispatcher.AllTasks.Count}\nin wait:{Dispatcher.WaitLine.Count}\nstandby:{Dispatcher.Standby}\navg wait:{avg}";
+                double avg = Dispatcher.AllTasks.Aggregate<Process, double>(0, (current, i) => current + i.WaitTime) / Dispatcher.AllTasks.Count;
+                debugLbl.Text = $"allTasks:{Dispatcher.AllTasks.Count}\nin wait:{Dispatcher.WaitLine.Count}\nstandby:{Dispatcher.Standby}\navg wait:{avg:0.00}";
                 if (args.NewTask != null)
                 {
                     Dispatcher.AllTasks.Add(args.NewTask);

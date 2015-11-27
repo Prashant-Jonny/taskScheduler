@@ -16,19 +16,27 @@ namespace taskScheduler
     }
     public class Dispatcher
     {
+        public Dispatcher()
+        {
+            for (int i = 0; i < WaitLine.Length; i++)
+            {
+                WaitLine[i] = new List<Process>();
+                AllTasksGrouped[i] = new List<Process>();
+            }
+        }
         public bool GenerateTasks { get; set; } = true;
         public Process CurProcess;
-        public IList<Process> WaitLine = new List<Process>();
         public IList<Process> AllTasks = new BindingList<Process>();
+        public IList<Process>[] AllTasksGrouped = new IList<Process>[MaxPriority]; 
         public static Random R = new Random();
+
+        public IList<Process>[] WaitLine = new IList<Process>[MaxPriority]; 
 
         public int CurrentTick { get; private set; }
         public int Standby { get; private set; }
 
-        public const double TaskAdditionProbability = 0.5;
-        public const int TickDuration = 500;
-        public const int MaxTasks = 30;
-
+        public double TaskAdditionProbability { get; set; } = 0.9;
+        public const int MaxPriority = 32;
 
         public delegate void UpdateProcesses(object sender, ProcessUpdateInfo args);
 
@@ -36,16 +44,17 @@ namespace taskScheduler
 
         public void RunTick()
         {
-            if (!GenerateTasks && !WaitLine.Any()) return;
-            Thread.Sleep(TickDuration);
+            if (!GenerateTasks && !WaitLine.Any(x => x.Any())) return;
+            //Thread.Sleep(TickDuration);
             CurrentTick++;
             var newTask = TryAddTask();
             if (newTask != null)
             {
-                //AllTasks.Add(newTask);
-                WaitLine.Add(newTask);
+                WaitLine[newTask.Priority].Add(newTask);
+                AllTasks.Add(newTask);
+                AllTasksGrouped[newTask.Priority].Add(newTask);
             }
-            if (!WaitLine.Any())
+            if (!WaitLine.Any(x => x.Any()))
             {
                 Standby++;
                 return;
@@ -66,9 +75,12 @@ namespace taskScheduler
 
         private void UpdateTasksInQueue()
         {
-            foreach (var p in WaitLine)
+            foreach (var plist in WaitLine)
             {
-                p.WaitTime++;
+                foreach (var p in plist)
+                {
+                    p.WaitTime++;
+                }
             }
         }
 
@@ -76,13 +88,21 @@ namespace taskScheduler
         {
             if (CurProcess == null)
             {
-                CurProcess = WaitLine.First();
+                CurProcess = WaitLine.First(x => x.Any()).First();
+                foreach (var i in WaitLine)
+                {
+                    if (i.Any())
+                    {
+                        CurProcess = i.First();
+                        break;
+                    }
+                }
             }
 
             CurProcess.ProgressInt++;
             if (CurProcess.ProgressInt >= CurProcess.TimeToSolve)
             {
-                WaitLine.Remove(CurProcess);
+                WaitLine[CurProcess.Priority].Remove(CurProcess);
                 CurProcess = null;
             }
             else
@@ -93,15 +113,14 @@ namespace taskScheduler
 
         private Process TryAddTask()
         {
-            if (GenerateTasks &&
-                WaitLine.Count < MaxTasks && R.NextDouble() < TaskAdditionProbability)
+            if (GenerateTasks && R.NextDouble() < TaskAdditionProbability)
             {
                 var task = new Process(CurrentTick)
                 {
+                    Priority = R.Next(MaxPriority),
                     TimeToSolve = R.Next(3, 10),
                 };
                 return task;
-                //AllTasks.Add(task);
             }
             return null;
         }

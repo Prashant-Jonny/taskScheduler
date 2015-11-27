@@ -13,6 +13,7 @@
         public int TimeToSolve { get; set; }   //time it takes to complete task
         public int ProgressInt;                //progress on completion of task
         public int DeliveryTick { get; }       //tick on which task was delivered
+        public int Priority { get; set; }
         public string Progress => $"{(double)ProgressInt / TimeToSolve * 100:0.00}%";
         public string SolvedTime => (ProgressInt >= TimeToSolve) ? (TimeToSolve + DeliveryTick + WaitTime - 1).ToString() : "-";
 

@@ -111,6 +111,8 @@ namespace taskScheduler
             }
         }
 
+        public int MinComplexity { get; set; } = 3;
+        public int MaxComplexity { get; set; } = 10;
         private Process TryAddTask()
         {
             if (GenerateTasks && R.NextDouble() < TaskAdditionProbability)
@@ -118,7 +120,7 @@ namespace taskScheduler
                 var task = new Process(CurrentTick)
                 {
                     Priority = R.Next(MaxPriority),
-                    TimeToSolve = R.Next(3, 10),
+                    TimeToSolve = R.Next(MinComplexity, MaxComplexity),
                 };
                 return task;
             }

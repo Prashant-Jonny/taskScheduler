@@ -17,8 +17,8 @@ namespace taskScheduler
             Dispatcher.UpdateStatus += DispatcherOnUpdateStatus;
             
             processBindingSource.DataSource = Dispatcher.AllTasks;
-            dataGridView.AutoGenerateColumns = true;
-            dataGridView.DataSource = processBindingSource;
+            //dataGridView.AutoGenerateColumns = true;
+            //dataGridView.DataSource = processBindingSource;
 
             IntencityCycleFinished += IntencityCycleFinishedCallback;
             numericUpDown1.Maximum = Steps - 1;
@@ -50,7 +50,7 @@ namespace taskScheduler
             if (!Running)
             {
                 Running = true;
-                initCharts();
+                InitCharts();
                 backgroundWorker1.RunWorkerAsync();
                 startStopBtn.Text = @"STOP";
             }
@@ -61,7 +61,7 @@ namespace taskScheduler
             }
         }
 
-        public void initCharts()
+        public void InitCharts()
         {
             //init waitTime (intensity) chart
             avgWaitForIntensityChart.Series.Clear();
@@ -86,35 +86,37 @@ namespace taskScheduler
                 ChartType = SeriesChartType.Spline,
                 BorderWidth = 3
             };
-
             avgStandbyChart.Series.Add(mySeries);
         }
         public const int Steps = 20;
         public double[,]WaitTimeForPriority = new double[Steps, Dispatcher.MaxPriority];
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            double probability = 0.1;
+            double probability = 0;
             double step = (1.0 - probability)/Steps;
             int []standByTime = new int[Steps];
             double []waitTimeForIntensity = new double[Steps];
             
             for (int s = 0; s < Steps && Running; s++)
             {
-                
-                this.Invoke((Action) (() =>
+                var probability1 = probability;
+                Invoke((Action) (() =>
                 {
                     Dispatcher = new Dispatcher
                     {
-                        TaskAdditionProbability = probability
+                        TaskAdditionProbability = probability1,
+                        MinComplexity = (int) minComplexity.Value,
+                        MaxComplexity = (int) maxComplexity.Value
                     };
                     Dispatcher.UpdateStatus += DispatcherOnUpdateStatus;
+
                 }));
                 for (int i = 0; i < 200; i++)
                 {
                     Dispatcher.RunTick();
                 }
                 Dispatcher.GenerateTasks = false;
-                for (int i = 0; i < 200; i++)
+                for (int i = 0; i < 500; i++)
                 {
                     Dispatcher.RunTick();
                 }
@@ -125,52 +127,44 @@ namespace taskScheduler
                     if (Dispatcher.AllTasksGrouped[i].Any())
                         WaitTimeForPriority[s, i] = Dispatcher.AllTasksGrouped[i].Average(x => x.WaitTime);
                 }
-                //var bld = new StringBuilder();
-                //for (int i = 0; i < WaitTimeForPriority.GetLength(0); i++)
-                //{
-                //    for (int j = 0; j < WaitTimeForPriority.GetLength(1); j++)
-                //        bld.Append($"{WaitTimeForPriority[i, j]};");
-                //    bld.Append("\n");
-                //}
-                //MessageBox.Show(bld.ToString());
                 IntencityCycleFinished?.Invoke(new PlotsData
                 {
-                    step = s,
-                    intensity = probability,
-                    waitTime = waitTimeForIntensity[s],
-                    standBy = standByTime[s]/(double)Dispatcher.CurrentTick,
+                    Step = s,
+                    Intensity = probability,
+                    WaitTime = waitTimeForIntensity[s],
+                    StandBy = standByTime[s]/(double)Dispatcher.CurrentTick,
                 });
                 probability += step;
             }
-            this.Invoke((Action) (() =>
+            Invoke((Action) (() =>
             {
                 Running = false;
-                startStopBtn.Text = "START!";
+                startStopBtn.Text = @"START!";
             }));
 
         }
 
         public class PlotsData
         {
-            public int step { get; set; }
-            public double standBy { get; set; }
-            public double waitTime { get; set; }
-            public double intensity { get; set; }
+            public int Step { get; set; }
+            public double StandBy { get; set; }
+            public double WaitTime { get; set; }
+            public double Intensity { get; set; }
         }
 
         public delegate void IntencityCycleFinishedDelegate(PlotsData data);
         
         public event IntencityCycleFinishedDelegate IntencityCycleFinished;
 
-        public Series[] waitByPriorityChart { get; set; }  = new Series[Steps];
+        public Series[] WaitByPriorityChart { get; set; }  = new Series[Steps];
 
         public void IntencityCycleFinishedCallback(PlotsData data)
         {
-            this.Invoke((Action)(() =>
+            Invoke((Action)(() =>
             {
-                this.avgWaitForIntensityChart.Series["mySeries"].Points.AddXY(data.intensity, data.waitTime);
+                avgWaitForIntensityChart.Series["mySeries"].Points.AddXY(data.Intensity, data.WaitTime);
                 avgWaitForIntensityChart.Invalidate();
-                this.avgStandbyChart.Series["mySeries"].Points.AddXY(data.intensity, data.standBy);
+                avgStandbyChart.Series["mySeries"].Points.AddXY(data.Intensity, data.StandBy);
                 avgStandbyChart.Invalidate();
 
                 var series = new Series
@@ -185,23 +179,21 @@ namespace taskScheduler
 
                 for (int i = 0; i < Dispatcher.MaxPriority; i++)
                 {
-                    series.Points.AddXY(i, WaitTimeForPriority[data.step, i]);
+                    series.Points.AddXY(i, WaitTimeForPriority[data.Step, i]);
                 }
-                waitByPriorityChart[data.step] = series;
-                numericUpDown1.Value = data.step;
+                WaitByPriorityChart[data.Step] = series;
+                numericUpDown1.Value = data.Step;
             }));
         }
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            //MessageBox.Show($"step:{numericUpDown1.Value}");
-            if (waitByPriorityChart[(int) numericUpDown1.Value] != null)
+            avgWaitForPriorityChart.Series.Clear();
+            if (WaitByPriorityChart[(int) numericUpDown1.Value] != null)
             {
-                avgWaitForPriorityChart.Series.Clear();
-                avgWaitForPriorityChart.Series.Add(waitByPriorityChart[(int) numericUpDown1.Value]);
-
+                avgWaitForPriorityChart.Series.Add(WaitByPriorityChart[(int) numericUpDown1.Value]);
                 avgWaitForPriorityChart.Invalidate();
                 avgWaitForPriorityChart.ChartAreas[0].AxisY.Maximum =
-                    waitByPriorityChart[(int) numericUpDown1.Value].Points.Max(x => x.YValues[0]);
+                    WaitByPriorityChart[(int) numericUpDown1.Value].Points.Max(x => x.YValues[0]);
             }
         }
     }
